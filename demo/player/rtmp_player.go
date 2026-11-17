@@ -140,7 +140,7 @@ func main() {
 	}
 }
 
-////////////////////////////////////////////
+// //////////////////////////////////////////
 func TryHandshakeByVLC() net.Conn {
 	// listen
 	listen, err := net.Listen("tcp", ":1935")

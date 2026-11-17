@@ -266,7 +266,7 @@ func (conn *conn) readLoop() {
 			if conn.err == nil {
 				conn.err = r.(error)
 				logger.ModulePrintf(logHandler, log.LOG_LEVEL_WARNING,
-					"readLoop panic:", conn.err)
+					"readLoop panic: %v", conn.err)
 			}
 		}
 		conn.Close()
@@ -405,7 +405,6 @@ func (conn *conn) readLoop() {
 							"Unfinish message continue copy remain: %d\n", remain)
 						continue
 					}
-					break
 				}
 				netErr, ok := err.(net.Error)
 				if !ok || !netErr.Temporary() {
@@ -513,7 +512,7 @@ func (conn *conn) InboundChunkStream(id uint32) (chunkStream *InboundChunkStream
 
 func (conn *conn) CloseMediaChunkStream(id uint32) {
 	// and the id is not the index of Allocator slice
-	index := (id - 2) / 6 - 1
+	index := (id-2)/6 - 1
 	conn.mediaChunkStreamIDAllocatorLocker.Lock()
 	conn.mediaChunkStreamIDAllocator[index] = false
 	conn.mediaChunkStreamIDAllocatorLocker.Unlock()
@@ -722,11 +721,9 @@ func (conn *conn) invokeAcknowledgement(message *Message) {
 // +------------------------------+-------------------------
 // Figure 5 Pay load for the ‘User Control Message’.
 //
-//
 // The first 2 bytes of the message data are used to identify the Event
 // type. Event type is followed by Event data. Size of Event data field
 // is variable.
-//
 //
 // The client or the server sends this message to notify the peer about
 // the user control events. For information about the message format,

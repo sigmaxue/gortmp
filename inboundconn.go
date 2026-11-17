@@ -229,7 +229,7 @@ func (ibConn *inboundConn) onCreateStream(cmd *Command) {
 	newChunkStream, err := ibConn.conn.CreateMediaChunkStream()
 	if err != nil {
 		logger.ModulePrintf(logHandler, log.LOG_LEVEL_WARNING,
-			"outboundConn::ReceivedCommand() CreateMediaChunkStream err:", err)
+			"outboundConn::ReceivedCommand() CreateMediaChunkStream err: %v", err)
 		return
 	}
 	stream := &inboundStream{

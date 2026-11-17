@@ -95,21 +95,21 @@ func (stream *inboundStream) Received(message *Message) bool {
 			_, err = message.Buf.ReadByte()
 			if err != nil {
 				logger.ModulePrintf(logHandler, log.LOG_LEVEL_WARNING,
-					"inboundStream::Received() Read first in flex commad err:", err)
+					"inboundStream::Received() Read first in flex commad err: %v", err)
 				return true
 			}
 		}
 		cmd.Name, err = amf.ReadString(message.Buf)
 		if err != nil {
 			logger.ModulePrintf(logHandler, log.LOG_LEVEL_WARNING,
-				"inboundStream::Received() AMF0 Read name err:", err)
+				"inboundStream::Received() AMF0 Read name err: %v", err)
 			return true
 		}
 		var transactionID float64
 		transactionID, err = amf.ReadDouble(message.Buf)
 		if err != nil {
 			logger.ModulePrintf(logHandler, log.LOG_LEVEL_WARNING,
-				"inboundStream::Received() AMF0 Read transactionID err:", err)
+				"inboundStream::Received() AMF0 Read transactionID err: %v", err)
 			return true
 		}
 		cmd.TransactionID = uint32(transactionID)
@@ -118,7 +118,7 @@ func (stream *inboundStream) Received(message *Message) bool {
 			object, err = amf.ReadValue(message.Buf)
 			if err != nil {
 				logger.ModulePrintf(logHandler, log.LOG_LEVEL_WARNING,
-					"inboundStream::Received() AMF0 Read object err:", err)
+					"inboundStream::Received() AMF0 Read object err: %v", err)
 				return true
 			}
 			cmd.Objects = append(cmd.Objects, object)

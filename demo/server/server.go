@@ -69,10 +69,10 @@ func (handler *ServerHandler) OnPublishStart(stream rtmp.InboundStream) {
 	fmt.Printf("OnPublishStart\n")
 }
 func (handler *ServerHandler) OnReceiveAudio(stream rtmp.InboundStream, on bool) {
-	fmt.Printf("OnReceiveAudio: %b\n", on)
+	fmt.Printf("OnReceiveAudio: %t\n", on)
 }
 func (handler *ServerHandler) OnReceiveVideo(stream rtmp.InboundStream, on bool) {
-	fmt.Printf("OnReceiveVideo: %b\n", on)
+	fmt.Printf("OnReceiveVideo: %t\n", on)
 }
 
 // Server handler functions
@@ -103,7 +103,7 @@ func main() {
 	}
 	defer server.Close()
 
-	ch := make(chan os.Signal)
+	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGINT)
 	sig := <-ch
 	fmt.Printf("Signal received: %v\n", sig)

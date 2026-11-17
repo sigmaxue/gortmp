@@ -276,7 +276,7 @@ var (
 
 const (
 	MAX_TIMESTAMP                       = uint32(2000000000)
-	AUTO_TIMESTAMP                      = uint32(0XFFFFFFFF)
+	AUTO_TIMESTAMP                      = uint32(0xFFFFFFFF)
 	DEFAULT_HIGH_PRIORITY_BUFFER_SIZE   = 2048
 	DEFAULT_MIDDLE_PRIORITY_BUFFER_SIZE = 128
 	DEFAULT_LOW_PRIORITY_BUFFER_SIZE    = 64
@@ -491,7 +491,6 @@ func ReadByteFromNetwork(r Reader) (b byte, err error) {
 		}
 		time.Sleep(time.Duration(retry*100) * time.Millisecond)
 	}
-	return
 }
 
 // Read bytes from network
@@ -516,7 +515,6 @@ func ReadAtLeastFromNetwork(r Reader, buf []byte, min int) (n int, err error) {
 		}
 		time.Sleep(time.Duration(retry*100) * time.Millisecond)
 	}
-	return
 }
 
 // Copy bytes from network
@@ -636,5 +634,4 @@ func FlushToNetwork(w *bufio.Writer) (err error) {
 		}
 		time.Sleep(time.Duration(retry*500) * time.Millisecond)
 	}
-	return
 }

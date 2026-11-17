@@ -11,6 +11,7 @@ import (
 	"github.com/zhangpeihao/goamf"
 	"github.com/zhangpeihao/log"
 	"net"
+	"strconv"
 	"time"
 )
 
@@ -74,11 +75,12 @@ func Dial(url string, handler OutboundConnHandler, maxChannelNumber int) (Outbou
 		return nil, err
 	}
 	var c net.Conn
+	addr := net.JoinHostPort(rtmpURL.host, strconv.FormatUint(uint64(rtmpURL.port), 10))
 	switch rtmpURL.protocol {
 	case "rtmp":
-		c, err = net.Dial("tcp", fmt.Sprintf("%s:%d", rtmpURL.host, rtmpURL.port))
+		c, err = net.Dial("tcp", addr)
 	case "rtmps":
-		c, err = tls.Dial("tcp", fmt.Sprintf("%s:%d", rtmpURL.host, rtmpURL.port), &tls.Config{InsecureSkipVerify: true})
+		c, err = tls.Dial("tcp", addr, &tls.Config{InsecureSkipVerify: true})
 	default:
 		err = errors.New(fmt.Sprintf("Unsupport protocol %s", rtmpURL.protocol))
 	}
@@ -92,7 +94,7 @@ func Dial(url string, handler OutboundConnHandler, maxChannelNumber int) (Outbou
 	}
 	br := bufio.NewReader(c)
 	bw := bufio.NewWriter(c)
-	timeout := time.Duration(10*time.Second)
+	timeout := time.Duration(10 * time.Second)
 	err = Handshake(c, br, bw, timeout)
 	//err = HandshakeSample(c, br, bw, timeout)
 	if err == nil {
@@ -304,7 +306,7 @@ func (obConn *outboundConn) OnReceivedRtmpCommand(conn Conn, command *Command) {
 						newChunkStream, err := obConn.conn.CreateMediaChunkStream()
 						if err != nil {
 							logger.ModulePrintf(logHandler, log.LOG_LEVEL_WARNING,
-								"outboundConn::ReceivedRtmpCommand() CreateMediaChunkStream err:", err)
+								"outboundConn::ReceivedRtmpCommand() CreateMediaChunkStream err: %v", err)
 							return
 						}
 						stream := &outboundStream{
